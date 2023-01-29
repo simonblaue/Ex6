@@ -33,13 +33,15 @@ function task()
     E0 = []
     eigenvecs = []
     mzs = []
+
+
     for N in 2:6
     
         H = createHamiltonian(N)
         res = eigen(H)
         push!(E0, res.values[1])
         push!(eigenvecs, res.vectors[:,1])
-        push!(mzs, sum([Sᶻ(res.vectors[:,1], i) for i in 1:N]))
+        # push!(mzs, sum([res.vectors[i,1] * [Sᶻ(BittArray(digits(j, 2, pad=N)), j) for j in 1:N] for i in 1:N]))
         println(size(res.vectors))
     end
     return E0, eigenvecs, mzs
@@ -55,8 +57,8 @@ for i in 1:5
     print_state(res[2][i])
 end
 
-display(pltEo)
-display(pltmzs)
-println(res[2])
+# display(pltEo)
+# display(pltmzs)
+println(res)
 
 
