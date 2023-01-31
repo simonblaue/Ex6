@@ -2,6 +2,7 @@
 include("directdiag.jl")
 using Plots
 using LaTeXStrings
+using ProgressMeter
 
 function correlations(eigenvec,eigenval, N)
     base = [BitArray(digits(i-1, base=2, pad=N)) for i in 1:2^N]
@@ -40,7 +41,7 @@ function task(Ns)
 
     corrs, Χs, Cs = [], [], []
 
-    for N in Ns
+    @showprogress for N in Ns
         res = averages(N)
         push!(corrs, res[1])
         push!(Χs, res[2])
@@ -66,13 +67,19 @@ plt2 = plot(Ns, Χs,
     ylabel="Magnetic susceptibility",
     label=""
 )
+hline!([1/4], color="black", label="high-temperature limit")
 
 plt3 = plot(Ns, Cs,
     xlabel=L"Number of spins $N$",
     ylabel="specific heat",
     label=""
 )
+hline!([3/13], color="black", label="high-temperature limit")
 
 display(plt1)
 display(plt2)
 display(plt3)
+
+savefig(plt1, "saves/task2c.corr.pdf")
+savefig(plt2, "saves/task2c.suzept.pdf")
+savefig(plt3, "saves/task2c.specheat.pdf")
