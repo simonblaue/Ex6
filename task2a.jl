@@ -4,18 +4,6 @@ using Printf
 using LaTeXStrings
 include("directdiag.jl")
 
-
-
-function m_z(vector::Vector{Float64}, N::Int)
-   
-    base = [BitArray(digits(i-1, base=2, pad=N)) for i in 1:2^N]
-    S(state) = [s ? 1/2 : -1/2 for s in state]
-    mz = sum(sum(vector .* S.(base)))
-    return mz
-end
-
-
-
 function task(Ns)
     E0 = []
     eigenvecs = []
