@@ -1,34 +1,86 @@
 
 using Plots
+using Printf
+using LaTeXStrings
 include("directdiag.jl")
 
 
-function task()
+
+function m_z(vector::Vector{Float64}, N::Int)
+   
+    base = [BitArray(digits(i-1, base=2, pad=N)) for i in 1:2^N]
+    S(state) = [s ? 1/2 : -1/2 for s in state]
+    mz = sum(sum(vector .* S.(base)))
+    return mz
+end
+
+
+
+function task(Ns)
     E0 = []
     eigenvecs = []
     mzs = []
 
 
-    for N in 2:6
+    for N in Ns
     
         H = createHamiltonian(N)
         res = eigen(H)
         push!(E0, res.values[1])
         push!(eigenvecs, res.vectors[:,1])
-        #push!(mzs, sum([res.vectors[i,1] * [Sᶻ(BittArray(digits(j, 2, pad=N)), j) for j in 1:N] for i in 1:N]))
+        push!(mzs, m_z(res.vectors[:,1], N))
     end
     return E0, eigenvecs, mzs
 end
 
-res = task()
+function eigvec_LaTeX(vec)
+    res = "\$("
 
-pltEo = scatter(res[1])
+    for num in vec
+        if num == 0
+            res *= "0, "
+        else
+            res *= "\\SI{"
+            res *= @sprintf "%.2e" num
+            res *= "}{}, "
+        end
+    end
 
-pltmzs = scatter(res[3])
+    res *= ")^\\top\$"
+    return res
+end
 
+
+###########
+
+Ns = 2:6
+
+res = task(Ns)
+
+pltEo = scatter(Ns,res[1],
+    xlabel = L"Number of Spins $N$",
+    ylabel = L"Ground-state Energy $E_0$",
+    label=""
+)
+
+pltmzs = scatter(Ns,res[3],
+    xlabel = L"Number of Spins $N$",
+    ylabel = L"Magnetisation $m_z$",
+    label=""
+)
+
+
+savefig(pltEo, "saves/task2a.E0.pdf")
+savefig(pltmzs, "saves/task2a.mzs.pdf")
 
 display(pltEo)
-# display(pltmzs)
+display(pltmzs)
+
+for v in res[2]
+    println(eigvec_LaTeX(v) * "\\\\")
+    println()
+end
+
 
 
 

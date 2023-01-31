@@ -1,5 +1,6 @@
 
 a_state = Int(0b101011)
+display(a_state)
 
 # a = BitArray(digits(a, base=2))
 a = 9588514242

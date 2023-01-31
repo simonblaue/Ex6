@@ -21,19 +21,3 @@ function createHamiltonian(N)
     return H
 end
 
-
-function SS(N)
-    S = zeros(2^N,2^N)
-    for a in 0:2^N-1
-        for i in 0:N-1
-            j = mod(i+1,N)
-            if bget(a,i) == bget(a,j)
-                S[a+1,a+1] = 1/4
-            else
-                H[a+1,a+1] = -1/4
-            end 
-        end
-    end
-    return H
-end
-
