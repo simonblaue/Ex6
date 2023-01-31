@@ -23,6 +23,6 @@ include("directdiag.jl")
 
 # sum(correlation.(res.vectors))
 
-N = 1
+N = 3
 
-mod1(3,N)
+createHamiltonian(N)
