@@ -51,6 +51,8 @@ pltEo = scatter(Ns,res[1],
     label=""
 )
 
+
+
 pltmzs = scatter(Ns,res[3],
     xlabel = L"Number of Spins $N$",
     ylabel = L"Magnetisation $m_z$",
@@ -64,11 +66,18 @@ savefig(pltmzs, "saves/task2a.mzs.pdf")
 display(pltEo)
 display(pltmzs)
 
-for v in res[2]
-    println(eigvec_LaTeX(v) * "\\\\")
-    println()
+# for v in res[2]
+#     println(eigvec_LaTeX(v) * "\\\\")
+#     println()
+# end
+
+for r in res[1]
+    println(r)
 end
 
 
+for r in res[3]
+    println(r)
+end
 
 

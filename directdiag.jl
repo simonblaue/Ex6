@@ -60,3 +60,39 @@ end
 function allmzBlocks(N)
     return [createBlockHamiltonian(sa(N,nup), N) for nup in 0:N]
 end
+
+function lanzos(H, Λ)
+    
+    @assert size(H)[1] == size(H)[2] "Not a square Matrix"
+
+    N = size(H)[1]
+    
+    if Λ == -1
+        Λ = N
+    end
+
+    f = zeros(N, Λ)
+    a = ones(Λ)
+    b = ones(Λ-1)
+
+    f[:,1] = rand(N)
+
+    a[1] = (f[:,1]' * H * f[:,1])/ (f[:,1]⋅f[:,1])
+
+    f[:,2] = H * f[:,1] - a[1] * f[:,1]
+
+    λ = 2
+    while λ < Λ
+
+        a[λ] = (f[:,λ]' * H *f[:,λ]) / (f[:,λ]⋅f[:,λ])
+        b[λ-1] = (f[:,λ]⋅f[:,λ]) / (f[:,λ-1]⋅f[:,λ-1])
+
+        f[:,λ+1] = H * f[:,λ] - a[λ] * f[:,λ] - b[λ-1] * f[:,λ-1]
+
+        λ += 1
+    end
+
+    smallH = SymTridiagonal(a, sqrt.(b))
+
+    return smallH
+end
