@@ -40,8 +40,8 @@ function sa(N, nup)
     return sₐ
 end
 
-function createBlockHamiltonian(states,)
-    H_size = 2^length(states)
+function createBlockHamiltonian(states)
+    H_size = length(states)
     N = length(BitArray(digits(maximum(states), base=2)))
     H = zeros(H_size,H_size)
     for (k,a) in enumerate(states)
@@ -62,8 +62,7 @@ function createBlockHamiltonian(states,)
 end
 
 function allmzBlocks(N)
-    all_block_states = [sa(N,nup) for nup in 0:N]
-    return [createBlockHamiltonian(states) for states in all_block_states]
+    return [createBlockHamiltonian(sa(N,nup)) for nup in 0:N]
 end
 
 #### Task 4
