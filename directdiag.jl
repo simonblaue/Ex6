@@ -81,28 +81,29 @@ function lanzos(H, Λ)
         return H
     end
 
-    f = zeros(N, Λ)
+    f = Vector{Vector{Float64}}(undef, Λ)
     a = ones(Λ)
     b = ones(Λ-1)
 
-    f[:,1] = rand(N)
+    f[1] = rand(N)
 
-    a[1] = (f[:,1]' * H * f[:,1])/ (f[:,1]⋅f[:,1])
+    a[1] = (f[1]' * H * f[1]) / (f[1]⋅f[1])
 
-    f[:,2] = H * f[:,1] - a[1] * f[:,1]
+    f[2] = H * f[1] - a[1] * f[1]
 
     λ = 2
     while λ < Λ
 
-        a[λ] = (f[:,λ]' * H *f[:,λ]) / (f[:,λ]⋅f[:,λ])
-        b[λ-1] = (f[:,λ]⋅f[:,λ]) / (f[:,λ-1]⋅f[:,λ-1])
+        a[λ] = (f[λ]' * H *f[λ]) / (f[λ]⋅f[λ])
+        b[λ-1] = (f[λ]⋅f[λ]) / (f[λ-1]⋅f[λ-1])
 
-        f[:,λ+1] = H * f[:,λ] - a[λ] * f[:,λ] - b[λ-1] * f[:,λ-1]
+        f[λ+1] = H * f[λ] - a[λ] * f[λ] - b[λ-1] * f[λ-1]
 
         λ += 1
     end
 
-    smallH = SymTridiagonal(a, sqrt.(b))
+    d = [(f[i]' * H * f[i]) / (f[i]⋅f[i]) for i in 1:Λ]
+    du = @. √(norm(f[2:end])^2 / norm(f[1:end-1])^2)
 
-    return smallH
+   return SymTridiagonal(d, du)
 end
