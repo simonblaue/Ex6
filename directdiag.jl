@@ -77,6 +77,10 @@ function lanzos(H, Λ)
         Λ = N
     end
 
+    if N < 2
+        return H
+    end
+
     f = zeros(N, Λ)
     a = ones(Λ)
     b = ones(Λ-1)
