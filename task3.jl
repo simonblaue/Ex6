@@ -18,6 +18,7 @@ function task(N)
     return Emin
 end
 
+
 x=[@elapsed(task(n)) for n in Ns]
 
 plt = scatter(Ns,x,

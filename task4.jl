@@ -3,9 +3,8 @@ using Plots
 using ProgressMeter
 
 function task(N)
-    N = 8
     blocks = allmzBlocks(N)
-    # H = createHamiltonian(N)
+    #H = createHamiltonian(N)
 
     E0 = Inf
     @showprogress for block in blocks
@@ -17,4 +16,4 @@ function task(N)
 end
 
 
-task(2:6)
+task(5)

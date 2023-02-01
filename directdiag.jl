@@ -28,6 +28,8 @@ function m_z(vector::Vector{Float64}, N::Int)
     return mz
 end
 
+### Task 3
+
 function sa(N, nup)
     sₐ = []
     for s in 0:2^N-1
@@ -38,8 +40,10 @@ function sa(N, nup)
     return sₐ
 end
 
-function createBlockHamiltonian(states,N)
-    H = zeros(2^N,2^N)
+function createBlockHamiltonian(states,)
+    H_size = 2^length(states)
+    N = length(BitArray(digits(maximum(states), base=2)))
+    H = zeros(H_size,H_size)
     for (k,a) in enumerate(states)
         for i in 0:N-1
             j = mod(i+1,N)
@@ -49,8 +53,8 @@ function createBlockHamiltonian(states,N)
                 H[k,k] += -1/4
                 aflipped = bflip(a, i)
                 aflipped = bflip(aflipped, j)
-                b = findall(aflipped .== states)[1]
-                H[k, b] += 1/2
+                l = findall(aflipped .== states)[1]
+                H[k, l] += 1/2
             end 
         end
     end
@@ -58,8 +62,11 @@ function createBlockHamiltonian(states,N)
 end
 
 function allmzBlocks(N)
-    return [createBlockHamiltonian(sa(N,nup), N) for nup in 0:N]
+    all_block_states = [sa(N,nup) for nup in 0:N]
+    return [createBlockHamiltonian(states) for states in all_block_states]
 end
+
+#### Task 4
 
 function lanzos(H, Λ)
     
